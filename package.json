@@ -1,0 +1,37 @@
+{
+  "name": "nan-marshal",
+  "version": "0.0.1",
+  "description": "Data type marshalling for NAN module",
+  "main": "include_dirs.js",
+  "scripts": {
+    "test": "tap --gc test/js/*-test.js",
+    "rebuild-tests": "node-gyp rebuild --directory test",
+    "docs": "doc/.build.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/BloodAxe/nan-marshal.git"
+  },
+  "keywords": [
+    "nodejs",
+    "node",
+    "c++"
+  ],
+  "author": "ekhvedchenya@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BloodAxe/nan-marshal/issues"
+  },
+  "homepage": "https://github.com/BloodAxe/nan-marshal#readme",
+  "dependencies": {
+    "nan": "^2.0.9"
+  },
+  "devDependencies": {
+    "bindings": "~1.2.1",
+    "commander": "^2.8.1",
+    "glob": "^5.0.14",
+    "node-gyp": "~3.0.1",
+    "tap": "~0.7.1",
+    "xtend": "~4.0.0"
+  }
+}

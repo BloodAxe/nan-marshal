@@ -8,7 +8,7 @@ addons:
     sources:
     - ubuntu-toolchain-r-test
     packages:
-    - g++-4.9.3
+    - g++-4.9
 env:
   matrix:
   - TRAVIS_NODE_VERSION="0.8"
@@ -24,7 +24,7 @@ install:
   - if [[ $TRAVIS_NODE_VERSION == "0.8" ]]; then npm install npm@2 && node_modules/.bin/npm install npm; else npm install npm; fi
   - mv node_modules npm
   - npm/.bin/npm --version
-  - if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.8.3; fi
+  - if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.9; fi
   - $CXX --version
   - npm/.bin/npm install
   - node_modules/.bin/node-gyp rebuild --directory test

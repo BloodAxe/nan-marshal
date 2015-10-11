@@ -21,23 +21,29 @@ NAN_METHOD(GetFirstNPrimes) {
 ```
 
 <a name="usage"></a>
+
+## Requirements
+
+This module requires [Nan][nan] package. If you are not using [Nan][nan] already for writing C++ addons for Nodejs I strongly avdise you to start doing that. Anyway, ``npm install --save nan`` is a right way to start.
+
 ## Usage
 
-Simply add **nan-marshal** as a dependency in the *package.json* of your Node addon:
+Simply add **nan-marshal** as a dependency module to *package.json* of your Node addon:
 
 ``` bash
-$ npm install --save nan nan-marshal
+$ npm install --save nan-marshal
 ```
-Pull in the path to **NAN** and **NAN-Marshal** in your *binding.gyp* so that you can use `#include <nan-Marshal.h>` in your *.cpp* files:
 
-``` python
+Add include directories for **NAN** and **NAN-Marshal** in your *binding.gyp* so that you can use `#include <nan-marshal.h>` in your *.cpp* files:
+
+```python
 "include_dirs" : [
     "<!(node -e \"require('nan')\")",
     "<!(node -e \"require('nan-marshal')\")"
 ]
 ```
 
-This works like a `-I<path-to-NAN-Marshal>` when compiling your addon.
+This works like a `-I<path-to-nan-marshal>` when compiling your addon.
 
 <a name="api"></a>
 ## API
@@ -53,7 +59,40 @@ To convert from C++ to V8 object: ``Nan::Marshal(..)``.
 - std::shared_ptr
 - Marshalling of used-defined types (There are intrusive and non-intrusive options available)
 
+User-defined serialization inspired by boost::serialization approach and you will find it similar and easy-to-use. Here's quick example of non-intrusive serialization of the OpenCV data type:
 
+```cpp
+namespace Nan
+{
+    namespace marshal
+    {
+        template<typename T>
+        struct Serializer < cv::Rect_<T> >
+        {
+            template<typename InputArchive>
+            static inline void load(InputArchive& ar, cv::Rect_<T>& val)
+            {
+                ar & make_nvp("x", val.x);
+                ar & make_nvp("y", val.y);
+                ar & make_nvp("width", val.width);
+                ar & make_nvp("height", val.height);
+            }
+
+            template<typename OutputArchive>
+            static inline void save(OutputArchive& ar, const cv::Rect_<T>& val)
+            {
+                ar & make_nvp("x", val.x);
+                ar & make_nvp("y", val.y);
+                ar & make_nvp("width", val.width);
+                ar & make_nvp("height", val.height);
+            }
+        };
+    }
+}
+```
+
+Having a snippet above in your code lets you to return JavaScript object like ``{ x:12, y:13, width:124, height: 144 }`` from C++ code. The same is true for V8 -> C++ marshalling. Nan::Marshal will convert V8 object to desired object type.
+ 
 <a name="tests"></a>
 ### Tests
 
@@ -79,3 +118,7 @@ Copyright (c) 2015 Ievgen Khvedchenia.
 Native Abstractions for Node.js is licensed under an MIT license. 
 All rights not explicitly granted in the MIT license are reserved. 
 See the included LICENSE file for more details.
+
+
+[nan]: https://github.com/nodejs/nan
+[nan-marshal]: https://github.com/BloodAxe/nan-marshal

@@ -1,6 +1,6 @@
 {
   "name": "nan-marshal",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Data type marshalling for NAN module",
   "main": "include_dirs.js",
   "scripts": {

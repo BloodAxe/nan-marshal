@@ -1,4 +1,7 @@
 Data type marshalling for C++ addons in Nodejs
+
+[![Build Status](https://travis-ci.org/BloodAxe/nan-marshal.png?branch=master)](https://travis-ci.org/BloodAxe/nan-marshal)
+
 ===============================
 
 This project contains some helper utilities that make native addon development a bit more easier.

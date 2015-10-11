@@ -1,7 +1,7 @@
 /*********************************************************************
  * NAN Marshal - Data type marshalling for NAN module
  *
- * Copyright (c) 2015 NAN-Check contributors:
+ * Copyright (c) 2015 NAN-Marshal contributors:
  *   - Ievgen Khvedchenia <https://github.com/BloodAxe>
  *
  * MIT License <https://github.com/BloodAxe/nan-Marshal/blob/master/LICENSE.md>
@@ -203,7 +203,6 @@ namespace Nan
             template<typename InputArchive>
             static inline void load(InputArchive& ar, std::vector<T>& val)
             {
-                TRACE_FUNCTION;
                 int N = ar.template As<v8::Array>()->Length();
 
                 val.resize(N);
@@ -275,7 +274,6 @@ namespace Nan
             template<typename InputArchive>
             static inline void load(InputArchive& ar, std::map<K, V>& map_val)
             {
-                TRACE_FUNCTION;
                 int N = ar.template As<v8::Array>()->Length();
                 for (int i = 0; i < N; i++)
                 {
@@ -343,7 +341,6 @@ namespace Nan
             template<typename InputArchive>
             static inline void load(InputArchive& ar, T(&val)[N])
             {
-                TRACE_FUNCTION;
                 for (int i = 0; i < N; i++)
                 {
                     V8Result item = ar.template As<v8::Array>()->Get(i);
@@ -372,7 +369,6 @@ namespace Nan
             template<typename InputArchive>
             static inline void load(InputArchive& ar, std::array<T, N>& val)
             {
-                TRACE_FUNCTION;
                 for (int i = 0; i < N; i++)
                 {
                     V8Result item = ar.template As<v8::Array>()->Get(i);
@@ -492,7 +488,6 @@ namespace Nan
             template<typename T>
             inline LoadArchive& operator& (const T& val)
             {
-                TRACE_FUNCTION;
                 Serializer<T>::load(*this, const_cast<T&>(val));
                 return *this;
             }
@@ -506,20 +501,15 @@ namespace Nan
             template<typename T>
             inline void load(nvp_struct<T>& val)
             {
-                LOG_TRACE_MESSAGE("Loading " << val.name);
-                TRACE_FUNCTION;
-
                 if (!_src->IsObject())
                 {
-                    LOG_TRACE_MESSAGE("Underlying instance is not an object");
-                    throw MarshalTypeMismatchException("Underlying instance is not an object");
+                    throw MarshalException("Underlying instance is not an object");
                 }
 
                 auto prop = _src->ToObject()->Get(Nan::New<v8::String>(val.name).ToLocalChecked());
                 if (prop.IsEmpty())
                 {
-                    LOG_TRACE_MESSAGE("Object does not contains property " << val.name);
-                    throw MarshalTypeMismatchException("Object does not contains property");
+                    throw MarshalException("Object does not contains property");
                 }
 
                 val.value = Marshal<T>(prop);
@@ -588,10 +578,8 @@ namespace Nan
     template <typename T>
     inline T Marshal(V8Result val)
     {
-        TRACE_FUNCTION;
-
         marshal::LoadArchive ia(val);
-        T loaded;
+        T loaded = T();
         ia & loaded;
         return std::move(loaded);
     }

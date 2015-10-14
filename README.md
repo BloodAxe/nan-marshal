@@ -22,7 +22,7 @@ NAN_METHOD(GetFirstNPrimes) {
 }
 ```
 
-Ok, enough words, gimme the code! All source code is available on GitHub: [nan-marshal](nan-marshal). 
+Ok, enough words, gimme the code! All source code is available on GitHub: [nan-marshal][nan-marshal]. 
 
 <span class="more"></more>
 
@@ -142,7 +142,7 @@ All rights not explicitly granted in the MIT license are reserved.
 See the included LICENSE file for more details.
 
 
-
+[nan]: https://github.com/nodejs/nan
 [nan-marshal]: https://github.com/BloodAxe/nan-marshal
 [nan-check]: https://github.com/BloodAxe/nan-check
 [cloudcv]: https://cloudcv.io

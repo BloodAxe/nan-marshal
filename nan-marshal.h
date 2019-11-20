@@ -441,7 +441,7 @@ namespace Nan
                     _dst = Nan::New<v8::Object>();
                 }
 
-                _dst->ToObject()->Set(Nan::New<v8::String>(val.name).ToLocalChecked(), Marshal(val.value));
+                Nan::Set(_dst, Nan::New<v8::String>(val.name).ToLocalChecked(), Marshal(val.value));
             }
 
             template<typename T>
@@ -506,7 +506,7 @@ namespace Nan
                     throw MarshalException("Underlying instance is not an object");
                 }
 
-                auto prop = _src->ToObject()->Get(Nan::New<v8::String>(val.name).ToLocalChecked());
+                auto prop = Nan::Get(_src, Nan::New<v8::String>(val.name).ToLocalChecked());
                 if (prop.IsEmpty())
                 {
                     throw MarshalException("Object does not contains property");
@@ -536,7 +536,7 @@ namespace Nan
             if (!_src->IsBoolean())
                 throw MarshalException("Argument is not a boolean");
 
-            val = _src->BooleanValue();
+            val = _src->BooleanValue(Nan::GetCurrentContext()).FromJust();
         }
 
         template<>
@@ -545,7 +545,7 @@ namespace Nan
             if (!_src->IsInt32())
                 throw MarshalException("Argument is not a number");
 
-            val = _src->Int32Value();
+            val = _src->Int32Value(Nan::GetCurrentContext()).FromJust();
         }
 
         template<>
@@ -554,7 +554,7 @@ namespace Nan
             if (!_src->IsNumber())
                 throw MarshalException("Argument is not a number");
 
-            val = (float)_src->NumberValue();
+            val = (float)_src->NumberValue(Nan::GetCurrentContext()).FromJust();
         }
 
         template<>
@@ -563,13 +563,13 @@ namespace Nan
             if (!_src->IsNumber())
                 throw MarshalException("Argument is not a number");
 
-            val = (double)_src->NumberValue();
+            val = (double)_src->NumberValue(Nan::GetCurrentContext()).FromJust();
         }
 
         template<>
         inline void LoadArchive::load(uint32_t& val)
         {
-            val = (uint32_t)_src->Uint32Value();
+            val = (uint32_t)_src->Uint32Value(Nan::GetCurrentContext()).FromJust();
         }
 
     }

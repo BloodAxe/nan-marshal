@@ -29,9 +29,7 @@ NAN_METHOD(GetFirstTenPrimes) {
 
 NAN_MODULE_INIT(Init) {
     using namespace Nan;
-    Set(target
-        , New<v8::String>("GetFirstTenPrimes").ToLocalChecked()
-        , New<v8::FunctionTemplate>(GetFirstTenPrimes)->GetFunction());
+    NAN_EXPORT(target, GetFirstTenPrimes);
 }
 
 NODE_MODULE(primeNumbers, Init)
